@@ -74,7 +74,7 @@ python main.py
    - Generate detailed logs in the `logs` directory
 
 ## 📁 Project Structure
-
+```
 github-analyzer/
 ├── auto_builder.py # Build automation logic
 ├── config.py # Configuration management
@@ -86,7 +86,7 @@ github-analyzer/
 ├── logger.py # Logging setup
 ├── main.py # Main entry point
 └── requirements.txt # Project dependencies
-
+```
 
 ## 🔍 Error Handling
 
