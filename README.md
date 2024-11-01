@@ -18,19 +18,18 @@ An intelligent tool that leverages AI to analyze GitHub repositories, automate b
 
 ## 📦 Installation
 
-1. Clone the repository:
+### Setup Instructions
 
-bash
+1. Clone the Repository:
 
-git clone https://github.com/Jimmyu2foru18/github-analyzer.git
-cd github-analyzer
-
+   ```bash
+   git clone https://github.com/Jimmyu2foru18/github-analyzer.git
+   cd github-analyzer
 
 2. Run the development setup script:
-
-bash
-run_project_dev.bat
-
+   
+   ```bash
+   run_project_dev.bat
 
 The script will:
 - Create a virtual environment
