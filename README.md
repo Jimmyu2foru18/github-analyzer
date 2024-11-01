@@ -21,6 +21,7 @@ An intelligent tool that leverages AI to analyze GitHub repositories, automate b
 1. Clone the repository:
 
 bash
+
 git clone https://github.com/Jimmyu2foru18/github-analyzer.git
 cd github-analyzer
 
