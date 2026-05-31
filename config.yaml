@@ -1,0 +1,7 @@
+MODEL_NAME: "gpt-4.0-mini"
+BASE_DIRECTORY: "github-repos"
+LOG_DIRECTORY: "logs"
+DSPY_SETTINGS:
+  cache_dir: "cache/dspy"
+  temperature: 0.1
+  max_tokens: 1000
