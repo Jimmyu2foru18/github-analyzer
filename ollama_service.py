@@ -10,10 +10,11 @@ class OllamaService:
     def __init__(self, config: Config):
         self.config = config
         self.logger = setup_logger(__name__, log_dir=config.LOG_DIRECTORY)
-        self.base_url = "http://localhost:11434/api"
+        self.base_url = config.OLLAMA_BASE_URL.rstrip("/")
 
-    async def generate(self, prompt: str, model: str = "llama3") -> str:
+    async def generate(self, prompt: str, model: str = None) -> str:
         """Send a prompt to Ollama and get a response."""
+        model = model or self.config.OLLAMA_MODEL
         try:
             async with httpx.AsyncClient(timeout=60.0) as client:
                 response = await client.post(

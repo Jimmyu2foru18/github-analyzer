@@ -1,6 +1,10 @@
+GITHUB_TOKEN: ""
+OPENAI_API_KEY: ""
 MODEL_NAME: "gpt-4.0-mini"
 BASE_DIRECTORY: "github-repos"
 LOG_DIRECTORY: "logs"
+OLLAMA_BASE_URL: "http://localhost:11434/api"
+OLLAMA_MODEL: "llama3"
 DSPY_SETTINGS:
   cache_dir: "cache/dspy"
   temperature: 0.1

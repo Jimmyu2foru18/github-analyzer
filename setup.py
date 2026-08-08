@@ -5,6 +5,7 @@ setup(
     version="0.1.0", 
     py_modules=[
         'main',
+        'scanner_main',
         'auto_builder',
         'config',
         'constants',
@@ -12,7 +13,9 @@ setup(
         'dspy_analyzer',
         'exceptions',
         'github_service',
-        'logger'
+        'logger',
+        'ollama_service',
+        'scanner_service'
     ],
     install_requires=[
         "PyGithub>=2.1.1",
@@ -21,7 +24,7 @@ setup(
         "python-dotenv>=1.0.0",
         "dspy-ai>=2.0.0",
         "pyyaml>=6.0.1",
-        "aiohttp>=3.8.0",
+        "httpx>=0.24.0",
     ],
-    python_requires=">=3.8",
+    python_requires=">=3.10",
 ) 
