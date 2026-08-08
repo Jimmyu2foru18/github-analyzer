@@ -19,11 +19,11 @@ class ScannerService:
             self.logger.info(f"Processing: {repo_full_name}")
             try:
                 repo_url = f"https://github.com/{repo_full_name}"
-                repo_path, repo = await self.github_service.download_repository(repo_url)
+                repo_path, repo = self.github_service.download_repository(repo_url)
                 if not repo:
                     continue
                 
-                readme_content = await self.github_service.get_readme_content(repo)
+                readme_content = self.github_service.get_readme_content(repo)
                 if not readme_content:
                     continue
                     

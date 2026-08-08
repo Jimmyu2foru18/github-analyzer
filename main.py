@@ -31,7 +31,7 @@ async def run_project(repo_url1: str, repo_url2: str = None):
 
         logger.info(f"Processing repository 1: {repo_url1}")
         try:
-            repo1_path, repo1 = await github_service.download_repository(repo_url1)
+            repo1_path, repo1 = github_service.download_repository(repo_url1)
             if not repo1_path or not repo1:
                 logger.error("Failed to download repository 1")
                 return
@@ -39,7 +39,7 @@ async def run_project(repo_url1: str, repo_url2: str = None):
             logger.error(f"Failed to process repository 1: {str(e)}")
             return
         
-        readme_content = await github_service.get_readme_content(repo1)
+        readme_content = github_service.get_readme_content(repo1)
         if not readme_content:
             logger.warning("No README found in repository")
             return
@@ -63,7 +63,7 @@ async def run_project(repo_url1: str, repo_url2: str = None):
         if repo_url2:
             logger.info(f"\nProcessing repository 2: {repo_url2}")
             try:
-                repo2_path, repo2 = await github_service.download_repository(repo_url2)
+                repo2_path, repo2 = github_service.download_repository(repo_url2)
                 if repo2_path:
                     missing_files = await compare_repositories(repo1_path, repo2_path)
                     if missing_files:

@@ -67,7 +67,7 @@ class Config:
         if not self.GITHUB_TOKEN:
             raise ValueError("GITHUB_TOKEN is required")
         if not self.OPENAI_API_KEY:
-            raise ValueError("OPENAI_API_KEY is required")
+            self.logger.warning("OPENAI_API_KEY is not set; OpenAI fallback will be unavailable")
             
         try:
             # Create directories
