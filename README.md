@@ -1,67 +1,89 @@
 # GitHub Repository Analyzer
 
-This tool uses AI to analyze GitHub repositories, automate build processes, compare codebases, and perform continuous background scanning with optional local LLM support via Ollama.
+AI-powered tool for analyzing GitHub repositories, extracting build instructions from README files, and automating build execution. Supports multiple LLM backends including DSPy, OpenAI, and Ollama.
 
-## Key Features
+## Features
 
-* **AI-Powered Analysis:** Extracts build instructions from README files using DSPy, OpenAI, or local LLMs (via Ollama).
-* **Automated Building:** Executes extracted build instructions automatically.
-* **Continuous Scanning:** Automated background scanning and auditing of repositories based on keyword searches.
-* **Repository Comparison:** Compares repositories to find missing files.
-* **Local LLM Integration:** Full support for running analysis locally using [Ollama](https://ollama.com/).
+- Extracts build instructions from repository README files
+- Executes automated dependency installation and build steps
+- Compares repositories to identify missing files
+- Continuous keyword-based scanning and auditing of public repositories
+- Local LLM support via Ollama for offline analysis
 
 ## Prerequisites
 
-* Python 3.10+
-* GitHub API Token ([How to get one](https://github.com/settings/tokens))
-* (Optional) OpenAI API Key
-* (Optional) [Ollama](https://ollama.com/) installed and running locally
+- Python 3.10+
+- GitHub API token
+- OpenAI API key (optional, used as fallback)
+- Ollama (optional, for local LLM inference)
 
 ## Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Jimmyu2foru18/github-analyzer.git
-   cd github-analyzer
-   ```
-
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+git clone https://github.com/Jimmyu2foru18/github-analyzer.git
+cd github-analyzer
+pip install -r requirements.txt
+```
 
 ## Configuration
 
-Set your environment variables or update `config.yaml`:
+Copy `config.yaml` and fill in the required values:
 
-* `GITHUB_TOKEN`: Your GitHub API token (Required)
-* `OPENAI_API_KEY`: Your OpenAI API key (Optional, used as fallback)
-* `OLLAMA_BASE_URL`: URL to your Ollama API (Default: `http://localhost:11434/api`)
-* `OLLAMA_MODEL`: Model to use (Default: `llama3`)
+```yaml
+GITHUB_TOKEN: "your_github_token"
+OPENAI_API_KEY: "your_openai_api_key"
+MODEL_NAME: "gpt-4.0-mini"
+BASE_DIRECTORY: "github-repos"
+LOG_DIRECTORY: "logs"
+OLLAMA_BASE_URL: "http://localhost:11434/api"
+OLLAMA_MODEL: "llama3"
+```
+
+Environment variables override config file values:
+- `GITHUB_TOKEN`
+- `OPENAI_API_KEY`
+- `OLLAMA_BASE_URL`
+- `OLLAMA_MODEL`
 
 ## Usage
 
-### 1. Analyze & Build
+### Analyze and Build a Repository
+
 ```bash
 python main.py
 ```
 
-### 2. Continuous Scanner
+Enter a GitHub repository URL when prompted. Optionally enter a second repository URL to compare file structures.
+
+### Continuous Scanner
+
 ```bash
 python scanner_main.py
 ```
-(Enter a keyword to start scanning and auditing relevant repositories.)
+
+Enter a keyword to search for and audit relevant repositories.
 
 ## Architecture
 
-* `github_service.py`: GitHub API interactions (download, search).
-* `ollama_service.py`: Interface for local LLMs via Ollama.
-* `scanner_service.py`: Orchestrates automated scanning and auditing.
-* `auto_builder.py`: Build automation and AI-driven analysis.
+| Module | Responsibility |
+|--------|---------------|
+| `github_service.py` | GitHub API interactions: download, search, README extraction |
+| `auto_builder.py` | Build automation and AI-driven analysis orchestration |
+| `dspy_analyzer.py` | DSPy-based README analysis |
+| `ollama_service.py` | Local LLM inference via Ollama |
+| `scanner_service.py` | Automated scanning and auditing workflow |
+| `config.py` | Configuration loading and validation |
+| `logger.py` | Logging configuration |
 
-## Acknowledgments
+## Analysis Pipeline
 
-* OpenAI for the GPT API
-* DSPy for the analysis framework
-* Ollama for local LLM capability
-* GitHub API for repository access
+1. Read repository README
+2. Attempt DSPy analysis
+3. Fallback to Ollama if DSPy fails
+4. Fallback to OpenAI if Ollama fails
+5. Parse structured build instructions
+6. Execute dependency installation and build steps
+
+## License
+
+MIT
