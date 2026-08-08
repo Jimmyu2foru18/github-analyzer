@@ -4,11 +4,11 @@ import sys
 import json
 from typing import Dict, List, Optional, Union
 import asyncio
-import openai
 from pathlib import Path
 import subprocess
 
 # Third-party imports
+from openai import AsyncOpenAI
 from decorators import cache_result, retry_on_failure
 from logger import setup_logger
 from dspy_analyzer import DSPyAnalyzer
@@ -21,10 +21,10 @@ class AutoBuilder:
     
     def __init__(self, config):
         self.config = config
-        openai.api_key = config.OPENAI_API_KEY
         self.logger = setup_logger(__name__, log_dir=config.LOG_DIRECTORY)
         self.dspy_analyzer = DSPyAnalyzer(config)
         self.ollama_service = OllamaService(config)
+        self.openai_client = AsyncOpenAI(api_key=config.OPENAI_API_KEY)
 
     @cache_result(Path("cache/analysis"))
     @retry_on_failure()
@@ -62,11 +62,37 @@ class AutoBuilder:
     async def _get_ollama_analysis(self, readme_content: str) -> Optional[Dict]:
         """Get analysis from Ollama"""
         try:
-            prompt = f"Analyze this README and extract build instructions (dependencies, setup_steps, build_steps, test_steps) as JSON: {readme_content}"
+            prompt = (
+                "Analyze this README and extract build instructions as JSON with keys: "
+                "dependencies (list of strings), setup_steps (list of {command, description}), "
+                "build_steps (list of {command, description}), test_steps (list of {command, description}). "
+                f"README content: {readme_content}"
+            )
             response = await self.ollama_service.generate(prompt, model=self.config.OLLAMA_MODEL)
             return json.loads(response)
         except Exception as e:
             self.logger.error(f"Ollama analysis failed: {e}")
+            return None
+
+    async def _get_openai_analysis(self, readme_content: str) -> Optional[Dict]:
+        """Get analysis from OpenAI"""
+        try:
+            prompt = (
+                "Analyze this README and extract build instructions as JSON with keys: "
+                "dependencies (list of strings), setup_steps (list of {command, description}), "
+                "build_steps (list of {command, description}), test_steps (list of {command, description}). "
+                f"README content: {readme_content}"
+            )
+            response = await self.openai_client.chat.completions.create(
+                model=self.config.MODEL_NAME,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.1,
+                max_tokens=1000,
+            )
+            content = response.choices[0].message.content
+            return json.loads(content)
+        except Exception as e:
+            self.logger.error(f"OpenAI analysis failed: {e}")
             return None
 
     async def execute_build_steps(self, repo_path: Path, build_instructions: Dict) -> bool:

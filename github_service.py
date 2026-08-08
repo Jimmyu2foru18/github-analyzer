@@ -5,10 +5,7 @@ from typing import Tuple, Optional, Dict, List
 import shutil
 from config import Config
 from logger import setup_logger
-
-class GitHubServiceError(Exception):
-    """Base exception for GitHub service errors"""
-    pass
+from exceptions import GitHubServiceError
 
 class GitHubService:
     def __init__(self, config: Config):
@@ -104,3 +101,12 @@ class GitHubService:
         except Exception as e:
             self.logger.error(f"Search failed: {e}")
             return []
+
+    def get_readme_content(self, repo) -> Optional[str]:
+        """Get README content from a repository object."""
+        try:
+            readme = repo.get_readme()
+            return readme.decoded_content.decode('utf-8')
+        except Exception as e:
+            self.logger.warning(f"No README found or could not decode: {e}")
+            return None
